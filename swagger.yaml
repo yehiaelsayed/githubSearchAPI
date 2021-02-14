@@ -1,0 +1,108 @@
+swagger: '2.0'
+info:
+  version: '1.0'
+  title: GitHub Search API
+  description: Github search API provides a search endpoint to search in users and repositories with cached utility for the same search quires
+  contact: {}
+host: localhost:3005
+basePath: /api
+schemes:
+- http
+consumes:
+- application/json
+produces:
+- application/json
+paths:
+  /search:
+    post:
+      description: search endpoint accepts search target and searches query then search in GitHub and return a unified result format
+      summary: localhost:3005/api/search
+      tags:
+      - Misc
+      operationId: localhost:3005/api/search
+      deprecated: false
+      produces:
+      - application/json
+      parameters:
+      - name: Body
+        in: body
+        required: true
+        description: ''
+        schema:
+          $ref: '#/definitions/searchrequest'
+      responses:
+        200:
+          description: ''
+          schema:
+            $ref: '#/definitions/serviceresponse'
+          examples:
+            application/json:
+              isSuccess: true
+              data:
+              - id: 123
+                pageUrl: https://github.com/test
+                stars: 1
+                name: test
+                avatar_url: https://avatars.githubusercontent.com/u/xxxx
+              error: ''
+          headers: {}
+  /clear-cache:
+    get:
+      description: clear Redis cache from all saved data
+      summary: clear cache
+      tags:
+      - Misc
+      operationId: clearcache
+      deprecated: false
+      produces:
+      - application/json
+      parameters: []
+      responses:
+        200:
+          description: ''
+          schema:
+            $ref: '#/definitions/serviceresponse'
+          headers: {}
+definitions:
+  searchrequest:
+    title: searchrequest
+    example:
+      query: yehiaelsa
+      type: users
+    type: object
+    properties:
+      query:
+        type: string
+      type:
+        type: string
+    required:
+    - query
+    - type
+  serviceresponse:
+    title: serviceresponse
+    description: generic service response
+    type: object
+    properties:
+      isSuccess:
+        description: request status
+        example: true
+        type: boolean
+        default: true
+      data:
+        description: response data
+        example: []
+        type: array
+        items:
+          type: object
+      error:
+        description: error message
+        example: network error
+        type: string
+        default: '""'
+    required:
+    - isSuccess
+    - data
+    - error
+tags:
+- name: Misc
+  description: ''
